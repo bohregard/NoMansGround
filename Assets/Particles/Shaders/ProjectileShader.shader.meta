@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 7a8139efafa00b14d9849fb57d750652
+timeCreated: 1536439469
+licenseType: Free
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _GroundBump_NM: {fileID: 2800000, guid: 56344b0ef0650184cbf36175ce6dd087, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
