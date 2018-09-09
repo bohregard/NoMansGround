@@ -38,7 +38,8 @@ public class Player : MonoBehaviour
         var lBump = Input.GetButton(joy + "LB");
         var up = Input.GetButton(joy + "Up");
         var down = Input.GetButton(joy + "Down");
-        var lT = Input.GetAxis(joy + "LT");
+        var switchWeapon = Input.GetButtonDown(joy + "Weapon");
+        // var lT = Input.GetAxis(joy + "LT");
         var rT = Input.GetAxis(joy + "RT");
 
         if (hor != 0)
@@ -98,21 +99,10 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (lT != 0 && lT != -1)
+        if (switchWeapon)
         {
-            // Fire(rocketParticle.transform);
-            if (!rocketParticle.isPlaying)
-            {
-                rocketParticle.Play(true);
-            }
-
-        }
-        else
-        {
-            if (rocketParticle.isPlaying)
-            {
-                rocketParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-            }
+            rocketLauncher.SetActive(!rocketLauncher.activeSelf);
+            assualtRifle.SetActive(!assualtRifle.activeSelf);
         }
     }
 

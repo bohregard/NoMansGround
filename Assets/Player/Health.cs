@@ -29,7 +29,6 @@ public class Health : MonoBehaviour
             rb.isKinematic = true;
             rb.freezeRotation = true;
             // gameObject.SetActive(false);
-            StartCoroutine("startRespawn");
         }
     }
 
