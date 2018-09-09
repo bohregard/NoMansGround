@@ -8,12 +8,12 @@ public class GameManager : Singleton<GameManager>
 {
 
     public GameObject[] players;
+    public Text[] playerTexts;
     public GameObject[] spawns;
     public float timer;
     public Text timerUI;
     private bool timerStart = false;
     private bool timerEnd = false;
-
 
     // Use this for initialization
     void Start()
@@ -46,7 +46,7 @@ public class GameManager : Singleton<GameManager>
         int score = -1;
         bool tie = false;
         Time.timeScale = .3f;
-        for(int i = 0; i<players.Length; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             Player stats = players[i].GetComponent<Player>();
             if (stats.kills > score)
@@ -68,7 +68,7 @@ public class GameManager : Singleton<GameManager>
         {
             timerUI.text = winningPlayer.name;
         }
-        StartCoroutine( BackToMenu());
+        StartCoroutine(BackToMenu());
     }
 
     public IEnumerator BackToMenu()
@@ -84,12 +84,17 @@ public class GameManager : Singleton<GameManager>
         {
             timer -= Time.deltaTime;
             timerUI.text = Mathf.FloorToInt(timer + 1).ToString();
-            if(timer <= 0)
+            if (timer <= 0)
             {
                 timerEnd = true;
                 EndGame();
             }
 
+        }
+
+        for (var i = 0; i < 4; i++)
+        {
+            playerTexts[i].text = "Health: " + players[0].GetComponent<Health>().HP;
         }
     }
 }

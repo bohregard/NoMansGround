@@ -136,6 +136,7 @@ public class Player : MonoBehaviour
         Health health = GetComponent<Health>();
         if (player.joy != joy && health.HP > 0)
         {
+            Debug.Log(other.name);
             switch (other.name)
             {
                 case "Projectile_PS":
