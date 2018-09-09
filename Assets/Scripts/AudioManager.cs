@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour {
 
+    private static AudioSource sfxSource;
+
 	// Use this for initialization
 	void Start () {
-		
+        sfxSource = GameObject.FindGameObjectWithTag("SFX").GetComponent<AudioSource>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    static public IEnumerator PlaySoundEffect(AudioClip soundEffect)
+    {
+        sfxSource.PlayOneShot(soundEffect, sfxSource.volume);
+        yield return null;
+    }
 }
