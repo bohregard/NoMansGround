@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour {
 
-    private static AudioSource audioSource;
+    private static AudioSource sfxSource;
 
 	// Use this for initialization
 	void Start () {
-        audioSource = FindObjectOfType<AudioSource>().GetComponent<AudioSource>();
+        sfxSource = GameObject.FindGameObjectWithTag("SFX").GetComponent<AudioSource>();
 	}
 
     static public IEnumerator PlaySoundEffect(AudioClip soundEffect)
     {
-        audioSource.PlayOneShot(soundEffect, audioSource.volume);
+        sfxSource.PlayOneShot(soundEffect, sfxSource.volume);
         yield return null;
     }
 }
