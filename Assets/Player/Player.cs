@@ -111,7 +111,7 @@ public class Player : MonoBehaviour
                     var locVel = newMissile.transform.InverseTransformDirection(rbM.velocity);
                     locVel.x = 10;
                     rbM.velocity = newMissile.transform.TransformDirection(locVel);
-                    newMissile.GetComponentInChildren<ParticleSystem>().Play();
+                    newMissile.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
                     firing = !firing;
                 }
             }

@@ -16,18 +16,12 @@ public class Missile : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void OnCollisionEnter(Collision col)
     {
-        // Debug.Log("Colliding");
-        // Debug.Log(col.gameObject.name);
-        // rb.isKinematic = true;
-        // explosion.Play();
-        // smoke.Stop();
+         Debug.Log("Colliding");
+         Debug.Log(col.gameObject.name);
+         rb.isKinematic = true;
+         explosion.Play();
+         smoke.Stop();
     }
 }

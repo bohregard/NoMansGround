@@ -21,13 +21,18 @@ public class GameManager : Singleton<GameManager>
         StartTimer();
         Debug.Log("Loading");
         Debug.Log(spawns.Length + " spawns");
-
+        /*
         foreach (GameObject item in players)
         {
             System.Random rand = new System.Random();
             var index = rand.Next(spawns.Length);
             item.transform.position = spawns[index].transform.position;
         }
+        */
+        players[0].transform.position = spawns[0].transform.position;
+        players[1].transform.position = spawns[1].transform.position;
+        players[2].transform.position = spawns[2].transform.position;
+        players[3].transform.position = spawns[3].transform.position;
     }
 
     void StartTimer()
