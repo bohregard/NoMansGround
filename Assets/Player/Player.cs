@@ -6,13 +6,20 @@ public class Player : MonoBehaviour
 {
 
     public string joy;
-    public ParticleSystem particle;
+    public GameObject assualtRifle;
+    public GameObject rocketLauncher;
+    [Range(0, 20f)]
+    public int hitDistance = 10;
     private Rigidbody rb;
+    private ParticleSystem assualtParticle;
+    private ParticleSystem rocketParticle;
 
     // Use this for initialization
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        assualtParticle = assualtRifle.GetComponentInChildren<ParticleSystem>();
+        rocketParticle = rocketLauncher.GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -76,29 +83,83 @@ public class Player : MonoBehaviour
 
         if (rT != 0 && rT != -1)
         {
-            Fire();
-            particle.Play();
+            // Fire(assualtParticle.transform);
+            if (!assualtParticle.isPlaying)
+            {
+                assualtParticle.Play(true);
+            }
+
         }
         else
         {
-            particle.Pause();
+            if (assualtParticle.isPlaying)
+            {
+                assualtParticle.Stop();
+            }
         }
 
         if (lT != 0 && lT != -1)
         {
+            // Fire(rocketParticle.transform);
+            if (!rocketParticle.isPlaying)
+            {
+                rocketParticle.Play(true);
+            }
+
+        }
+        else
+        {
+            if (rocketParticle.isPlaying)
+            {
+                rocketParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
         }
     }
 
-    void Fire()
+    void OnCollisionEnter(Collision col)
     {
-        int layerMask = 1 << 8;
+        Debug.Log("Collision " + joy);
+    }
 
-        layerMask = ~layerMask;
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
+    void OnParticleCollision(GameObject other)
+    {
+        if (other.GetComponentInParent<Player>().joy != joy)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            Health health = GetComponent<Health>();
+            switch (other.name)
+            {
+                case "AssaultParticle":
+                    if (health.HP - health.bulletHp <= 0)
+                    {
+                        health.HP = 0;
+                        Debug.LogError("DEAD");
+                    }
+                    else
+                    {
+                        health.HP -= health.bulletHp;
+                    }
+                    break;
+                case "RocketParticle":
+                    if (health.HP - health.rocketHp <= 0)
+                    {
+                        health.HP = 0;
+                        Debug.LogError("DEAD");
+                    }
+                    else
+                    {
+                        health.HP -= health.rocketHp;
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void Fire(Transform t)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(t.position, t.TransformDirection(Vector3.forward), out hit, hitDistance, LayerMask.GetMask("Players")))
+        {
+            Debug.DrawRay(t.position, t.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             GameObject detected = hit.collider.gameObject;
             if (hit.collider.gameObject.GetComponent<Health>() != null)
             {
@@ -116,7 +177,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+            Debug.DrawRay(t.position, t.TransformDirection(Vector3.forward) * hitDistance, Color.white);
         }
     }
 }
