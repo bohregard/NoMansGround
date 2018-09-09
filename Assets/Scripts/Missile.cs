@@ -31,6 +31,6 @@ public class Missile : MonoBehaviour
     public IEnumerator disable()
     {
         yield return new WaitForSeconds(5f);
-        Destroy(this);
+        Destroy(gameObject);
     }
 }
