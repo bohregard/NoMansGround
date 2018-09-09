@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class RM_MainMenu : MonoBehaviour {
 
-	public void Play()
+    public EventSystem es;
+    public GameObject button;
+
+    public void Start()
+    {
+        es.SetSelectedGameObject(button);
+    }
+
+    public void Play()
     {
         SceneManager.LoadScene("Level 1");
     }
