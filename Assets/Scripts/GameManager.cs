@@ -43,7 +43,7 @@ public class GameManager : Singleton<GameManager>
     void EndGame()
     {
         Player winningPlayer = null;
-        int score = -1;
+        int score = 0;
         bool tie = false;
         Time.timeScale = .3f;
         for (int i = 0; i < players.Length; i++)
@@ -74,6 +74,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator BackToMenu()
     {
         yield return new WaitForSeconds(1.1f);
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
 

@@ -54,5 +54,7 @@ public class Health : MonoBehaviour
         // text.enabled = true;
         rb.isKinematic = false;
         rb.freezeRotation = false;
+        var rand = new System.Random().Next(4);
+        gameObject.transform.position = GameManager.Instance.spawns[rand].transform.position;
     }
 }
