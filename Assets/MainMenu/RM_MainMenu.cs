@@ -8,7 +8,12 @@ public class RM_MainMenu : MonoBehaviour {
 
 	public void Play()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level 1");
+    }
+
+    public void Controls()
+    {
+        SceneManager.LoadScene("Controls");
     }
 
     public void Credits()
