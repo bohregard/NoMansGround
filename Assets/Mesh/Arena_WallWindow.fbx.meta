@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c26f154a464db5845b6a7844525d4a15
-timeCreated: 1536466856
+guid: f50a36bc8d95eeb4eb28b275ab97203e
+timeCreated: 1536502714
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -8,7 +8,7 @@ ModelImporter:
     100000: //RootNode
     400000: //RootNode
     2100000: lambert1
-    2100002: Glass
+    2100002: GLASS
     2300000: //RootNode
     3300000: //RootNode
     4300000: polySurface90
