@@ -48,7 +48,7 @@ public class Health : MonoBehaviour
     private IEnumerator startRespawn()
     {
         Debug.Log("Start Respawn");
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(3f);
         Debug.Log("Respawning");
         HP = 100f;
         // text.enabled = true;
