@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public string joy;
     public GameObject assualtRifle;
     public GameObject rocketLauncher;
+    public GameObject missile;
+    public GameObject rocketBarrel;
     [Range(0, 20f)]
     public int hitDistance = 10;
     public int kills = 0;
@@ -17,7 +19,7 @@ public class Player : MonoBehaviour
     private ParticleSystem assualtParticle;
     private ParticleSystem rocketParticle;
     private Animator animator;
-
+    private bool firing;
 
     // Use this for initialization
     void Start()
@@ -90,12 +92,27 @@ public class Player : MonoBehaviour
 
         if (rT != 0 && rT != -1)
         {
-            // Fire(assualtParticle.transform);
-            if (!assualtParticle.isPlaying)
+            if (!rocketLauncher.activeSelf)
             {
-                assualtParticle.Play(true);
+                // Fire(assualtParticle.transform);
+                if (!assualtParticle.isPlaying)
+                {
+                    assualtParticle.Play(true);
+                }
             }
-
+            else
+            {
+                if (!firing)
+                {
+                    GameObject newMissile = Instantiate(missile, rocketBarrel.transform.position, rocketBarrel.transform.rotation);
+                    var rbM = newMissile.GetComponent<Rigidbody>();
+                    var locVel = newMissile.transform.InverseTransformDirection(rbM.velocity);
+                    locVel.x = 10;
+                    rbM.velocity = newMissile.transform.TransformDirection(locVel);
+                    newMissile.GetComponentInChildren<ParticleSystem>().Play();
+                    firing = !firing;
+                }
+            }
         }
         else
         {
@@ -154,10 +171,15 @@ public class Player : MonoBehaviour
     private IEnumerator swapWeapon()
     {
         animator.SetBool("IsSwap", true);
-        yield return new WaitForSeconds(0.5f);
-        rocketLauncher.SetActive(!rocketLauncher.activeSelf);
-        assualtRifle.SetActive(!assualtRifle.activeSelf);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
+        var rVal = !rocketLauncher.activeSelf;
+        var aVal = !assualtRifle.activeSelf;
+        rocketLauncher.SetActive(false);
+        assualtRifle.SetActive(false);
+        yield return new WaitForSeconds(0.3f);
         animator.SetBool("IsSwap", false);
+        yield return new WaitForSeconds(0.5f);
+        rocketLauncher.SetActive(rVal);
+        assualtRifle.SetActive(aVal);
     }
 }
