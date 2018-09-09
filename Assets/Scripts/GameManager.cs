@@ -94,7 +94,7 @@ public class GameManager : Singleton<GameManager>
 
         for (var i = 0; i < 4; i++)
         {
-            playerTexts[i].text = "Health: " + players[i].GetComponent<Health>().HP;
+            playerTexts[i].text = "Health: " + Mathf.Round(players[i].GetComponent<Health>().HP);
             if(players[i].GetComponent<Health>().HP <= 0)
             {
                 playerTexts[i].text = "Respawning";
