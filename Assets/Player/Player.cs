@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
 
     public IEnumerator NewMissile()
     {
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(5f);
         firing = !firing;
     }
 
