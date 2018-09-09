@@ -33,6 +33,18 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void regen()
+    {
+        if (HP + 50f > 100f)
+        {
+            HP = 100f;
+        }
+        else
+        {
+            HP += 50f;
+        }
+    }
+
     private IEnumerator startRespawn()
     {
         Debug.Log("Start Respawn");
