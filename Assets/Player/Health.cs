@@ -25,6 +25,7 @@ public class Health : MonoBehaviour
         // text.text = "Health: " + HP;
         if (HP == 0 && !rb.isKinematic)
         {
+
             // text.enabled = false;
             rb.isKinematic = true;
             rb.freezeRotation = true;
