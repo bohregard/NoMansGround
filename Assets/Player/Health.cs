@@ -10,7 +10,7 @@ public class Health : MonoBehaviour
     public float HP = 100f;
     public float bulletHp = 0.6f;
     public float rocketHp = 80f;
-    public Text text;
+    // public Text text;
     private Rigidbody rb;
 
     // Use this for initialization
@@ -22,18 +22,24 @@ public class Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.text = "Health: " + HP;
+        // text.text = "Health: " + HP;
         if (HP == 0 && !rb.isKinematic)
         {
-            text.enabled = false;
+            // text.enabled = false;
             rb.isKinematic = true;
             rb.freezeRotation = true;
-            // gameObject.SetActive(false);
+            StartCoroutine("startRespawn");
         }
     }
 
-    private void startRespawn()
+    private IEnumerator startRespawn()
     {
-
+        Debug.Log("Start Respawn");
+        yield return new WaitForSeconds(10f);
+        Debug.Log("Respawning");
+        HP = 100f;
+        // text.enabled = true;
+        rb.isKinematic = false;
+        rb.freezeRotation = false;
     }
 }
