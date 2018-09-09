@@ -9,6 +9,8 @@ public class Missile : MonoBehaviour
     public ParticleSystem smoke;
 
     private Rigidbody rb;
+
+    public Player playerRef;
     // Use this for initialization
     void Start()
     {
@@ -18,10 +20,17 @@ public class Missile : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-         Debug.Log("Colliding");
-         Debug.Log(col.gameObject.name);
-         rb.isKinematic = true;
-         explosion.Play();
-         smoke.Stop();
+        Debug.Log("Colliding");
+        Debug.Log(col.gameObject.name);
+        rb.isKinematic = true;
+        explosion.Play();
+        smoke.Stop();
+        StartCoroutine("disable");
+    }
+
+    public IEnumerator disable()
+    {
+        yield return new WaitForSeconds(5f);
+        Destroy(this);
     }
 }

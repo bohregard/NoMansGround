@@ -94,7 +94,7 @@ public class GameManager : Singleton<GameManager>
 
         for (var i = 0; i < 4; i++)
         {
-            playerTexts[i].text = "Health: " + players[0].GetComponent<Health>().HP;
+            playerTexts[i].text = "Health: " + players[i].GetComponent<Health>().HP;
         }
     }
 }

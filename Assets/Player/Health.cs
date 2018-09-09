@@ -8,7 +8,7 @@ public class Health : MonoBehaviour
 
     [Range(0, 100f)]
     public float HP = 100f;
-    public float bulletHp = 0.6f;
+    public float bulletHp = 1.2f;
     public float rocketHp = 80f;
     // public Text text;
     private Rigidbody rb;

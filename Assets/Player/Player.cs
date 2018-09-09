@@ -107,12 +107,14 @@ public class Player : MonoBehaviour
                 if (!firing)
                 {
                     GameObject newMissile = Instantiate(missile, rocketBarrel.transform.position, rocketBarrel.transform.rotation);
+                    newMissile.GetComponent<Missile>().playerRef = this;
                     var rbM = newMissile.GetComponent<Rigidbody>();
                     var locVel = newMissile.transform.InverseTransformDirection(rbM.velocity);
                     locVel.x = 10;
                     rbM.velocity = newMissile.transform.TransformDirection(locVel);
                     newMissile.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
                     firing = !firing;
+                    StartCoroutine("NewMissile");
                 }
             }
         }
@@ -130,45 +132,80 @@ public class Player : MonoBehaviour
         }
     }
 
+    public IEnumerator NewMissile()
+    {
+        yield return new WaitForSeconds(20f);
+        firing = !firing;
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        Debug.Log(col.gameObject.name);
+        Health health = GetComponent<Health>();
+        if (col.gameObject.name.Contains("Missile"))
+        {
+            var player = col.gameObject.GetComponent<Missile>().playerRef;
+            if (health.HP - health.rocketHp <= 0)
+            {
+                health.HP = 0;
+                // player.kills++;
+                // player.killText.text = player.kills.ToString();
+                deaths++;
+                Debug.LogError("DEAD");
+                Debug.LogError(joy + "Deaths: " + deaths);
+                Debug.LogError(joy + "Kills: " + kills);
+                Debug.LogError(player.joy + "Deaths: " + player.deaths);
+                Debug.LogError(player.joy + "Kills: " + player.kills);
+            }
+            else
+            {
+                health.HP -= health.rocketHp;
+            }
+        }
+    }
+
     void OnParticleCollision(GameObject other)
     {
         var player = other.GetComponentInParent<Player>();
         Health health = GetComponent<Health>();
         if (player.joy != joy && health.HP > 0)
         {
+
             Debug.Log(other.name);
-            switch (other.name)
+            Debug.Log(health.HP);
+            Debug.Log(health.bulletHp);
+            // switch (other.name)
+            // {
+            //     case "Projectile_PS":
+            if (health.HP - health.bulletHp <= 0)
             {
-                case "Projectile_PS":
-                    if (health.HP - health.bulletHp <= 0)
-                    {
-                        health.HP = 0;
-                        player.kills++;
-                        player.killText.text = player.kills.ToString();
-                        deaths++;
-                        Debug.LogError("DEAD");
-                        Debug.LogError(joy + "Deaths: " + deaths);
-                        Debug.LogError(joy + "Kills: " + kills);
-                        Debug.LogError(player.joy + "Deaths: " + player.deaths);
-                        Debug.LogError(player.joy + "Kills: " + player.kills);
-                    }
-                    else
-                    {
-                        health.HP -= health.bulletHp;
-                    }
-                    break;
-                case "RocketParticle":
-                    if (health.HP - health.rocketHp <= 0)
-                    {
-                        health.HP = 0;
-                        Debug.LogError("DEAD");
-                    }
-                    else
-                    {
-                        health.HP -= health.rocketHp;
-                    }
-                    break;
+                health.HP = 0;
+                player.kills++;
+                // player.killText.text = player.kills.ToString();
+                deaths++;
+                Debug.LogError("DEAD");
+                Debug.LogError(joy + "Deaths: " + deaths);
+                Debug.LogError(joy + "Kills: " + kills);
+                Debug.LogError(player.joy + "Deaths: " + player.deaths);
+                Debug.LogError(player.joy + "Kills: " + player.kills);
             }
+            else
+            {
+                health.HP -= health.bulletHp;
+            }
+            //         break;
+            //     case "RocketParticle":
+            //         if (health.HP - health.rocketHp <= 0)
+            //         {
+            //             health.HP = 0;
+            //             Debug.LogError("DEAD");
+            //         }
+            //         else
+            //         {
+            //             health.HP -= health.rocketHp;
+            //         }
+            //         break;
+            // }
         }
     }
 
