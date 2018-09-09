@@ -10,9 +10,14 @@ public class Player : MonoBehaviour
     public GameObject rocketLauncher;
     [Range(0, 20f)]
     public int hitDistance = 10;
+    public int kills = 0;
+    public int deaths = 0;
+    public int velocity = 4;
     private Rigidbody rb;
     private ParticleSystem assualtParticle;
     private ParticleSystem rocketParticle;
+    private Animator animator;
+
 
     // Use this for initialization
     void Start()
@@ -20,6 +25,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         assualtParticle = assualtRifle.GetComponentInChildren<ParticleSystem>();
         rocketParticle = rocketLauncher.GetComponentInChildren<ParticleSystem>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -44,42 +50,42 @@ public class Player : MonoBehaviour
 
         if (hor != 0)
         {
-            rb.AddRelativeForce(new Vector3(2 * hor, 0, 0)); //todo translate the force
+            rb.AddRelativeForce(new Vector3(velocity * hor, 0, 0)); //todo translate the force
         }
 
         if (vert != 0)
         {
-            rb.AddRelativeForce(new Vector3(0, 0, 2 * vert));
+            rb.AddRelativeForce(new Vector3(0, 0, velocity * vert));
         }
 
         if (up)
         {
-            rb.AddRelativeForce(new Vector3(0, 2, 0));
+            rb.AddRelativeForce(new Vector3(0, velocity, 0));
         }
 
         if (down)
         {
-            rb.AddRelativeForce(new Vector3(0, -2, 0));
+            rb.AddRelativeForce(new Vector3(0, -velocity, 0));
         }
 
         if (mX != 0)
         {
-            transform.Rotate(Vector3.up * mX);
+            transform.Rotate(Vector3.up * velocity * mX);
         }
 
         if (mZ != 0)
         {
-            transform.Rotate(Vector3.right * mZ);
+            transform.Rotate(Vector3.right * velocity * mZ);
         }
 
         if (rBump)
         {
-            transform.Rotate(Vector3.back);
+            transform.Rotate(Vector3.back * velocity);
         }
 
         if (lBump)
         {
-            transform.Rotate(Vector3.forward);
+            transform.Rotate(Vector3.forward * velocity);
         }
 
         if (rT != 0 && rT != -1)
@@ -99,30 +105,31 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (switchWeapon)
+        if (switchWeapon && !animator.GetBool("IsSwap"))
         {
-            rocketLauncher.SetActive(!rocketLauncher.activeSelf);
-            assualtRifle.SetActive(!assualtRifle.activeSelf);
+            StartCoroutine("swapWeapon");
         }
-    }
-
-    void OnCollisionEnter(Collision col)
-    {
-        Debug.Log("Collision " + joy);
     }
 
     void OnParticleCollision(GameObject other)
     {
-        if (other.GetComponentInParent<Player>().joy != joy)
+        var player = other.GetComponentInParent<Player>();
+        Health health = GetComponent<Health>();
+        if (player.joy != joy && health.HP > 0)
         {
-            Health health = GetComponent<Health>();
             switch (other.name)
             {
-                case "AssaultParticle":
+                case "Projectile_PS":
                     if (health.HP - health.bulletHp <= 0)
                     {
                         health.HP = 0;
+                        player.kills++;
+                        deaths++;
                         Debug.LogError("DEAD");
+                        Debug.LogError(joy + "Deaths: " + deaths);
+                        Debug.LogError(joy + "Kills: " + kills);
+                        Debug.LogError(player.joy + "Deaths: " + player.deaths);
+                        Debug.LogError(player.joy + "Kills: " + player.kills);
                     }
                     else
                     {
@@ -144,30 +151,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Fire(Transform t)
+    private IEnumerator swapWeapon()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(t.position, t.TransformDirection(Vector3.forward), out hit, hitDistance, LayerMask.GetMask("Players")))
-        {
-            Debug.DrawRay(t.position, t.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            GameObject detected = hit.collider.gameObject;
-            if (hit.collider.gameObject.GetComponent<Health>() != null)
-            {
-                Health health = hit.collider.gameObject.GetComponent<Health>();
-                if (health.HP - 0.3f <= 0)
-                {
-                    health.HP = 0;
-                    Debug.LogError("DEAD");
-                }
-                else
-                {
-                    health.HP -= 0.3f;
-                }
-            }
-        }
-        else
-        {
-            Debug.DrawRay(t.position, t.TransformDirection(Vector3.forward) * hitDistance, Color.white);
-        }
+        animator.SetBool("IsSwap", true);
+        yield return new WaitForSeconds(0.5f);
+        rocketLauncher.SetActive(!rocketLauncher.activeSelf);
+        assualtRifle.SetActive(!assualtRifle.activeSelf);
+        yield return new WaitForSeconds(0.2f);
+        animator.SetBool("IsSwap", false);
     }
 }
