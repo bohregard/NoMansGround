@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour
     public int kills = 0;
     public int deaths = 0;
     public int velocity = 4;
+    public Text killText;
     private Rigidbody rb;
     private ParticleSystem assualtParticle;
     private ParticleSystem rocketParticle;
@@ -141,6 +143,7 @@ public class Player : MonoBehaviour
                     {
                         health.HP = 0;
                         player.kills++;
+                        player.killText.text = player.kills.ToString();
                         deaths++;
                         Debug.LogError("DEAD");
                         Debug.LogError(joy + "Deaths: " + deaths);
